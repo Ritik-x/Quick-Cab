@@ -1,6 +1,11 @@
 import express from "express";
-import { registerUser } from "../controllers/user.controller.js";
+import {
+  getUser,
+  loginUser,
+  registerUser,
+} from "../controllers/user.controller.js";
 import { body } from "express-validator";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.post(
@@ -14,4 +19,6 @@ router.post(
   registerUser
 );
 
+router.post("/login", loginUser); // Placeholder for login route
+router.get("/profie", authMiddleware, getUser);
 export default router;

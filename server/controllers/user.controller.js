@@ -29,3 +29,57 @@ export const registerUser = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Email and password are required." });
+  }
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid user" });
+    }
+
+    if (!user.password) {
+      return res
+        .status(400)
+        .json({ message: "Password not set for this user" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.cookie("token", token);
+    return res.status(200).json({
+      userId: user._id,
+      message: "User logged in successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUser = async (req, res) => {
+  const userId = req.params._id;
+  if (!userId) {
+    return res.status(400).json({ message: "User id is required" });
+  }
+  try {
+    const user = await userModel.findById(userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json({ user });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
