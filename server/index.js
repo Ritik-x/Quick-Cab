@@ -4,6 +4,7 @@ import "dotenv/config";
 import connectDb from "./db/db.js";
 import router from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
+import Captainrouter from "./routes/captain.routes.js";
 const app = express();
 const port = process.env.PORT || 5000;
 connectDb();
@@ -15,6 +16,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 app.use("/user", router);
+app.use("/captain", Captainrouter);
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
