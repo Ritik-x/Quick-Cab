@@ -83,3 +83,20 @@ export const getUser = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const logoutUser = async (req, res) => {
+  try {
+    // Frontend ko bolenge token delete kar de
+    res.clearCookie("token"); // agar cookies use karte ho
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Logout failed",
+      error: error.message,
+    });
+  }
+};
