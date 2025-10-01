@@ -69,7 +69,11 @@ const UserLogin = () => {
           Login
         </button>
         <p className="text-center">
-          New Here ? <Link className="text-blue "> Create New Account </Link>
+          New Here ?{" "}
+          <Link to="/usersignup" className="text-blue-600 ">
+            {" "}
+            Create New Account{" "}
+          </Link>
         </p>
         {/* Captain Button */}
         <Link

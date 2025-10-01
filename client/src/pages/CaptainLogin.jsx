@@ -68,7 +68,10 @@ const CaptainLogin = () => {
           Login
         </button>
         <p className="text-center">
-          Join as Rider ? <Link className="text-blue ">Register here </Link>
+          Join as Rider ?{" "}
+          <Link to="/captainsignup" className="text-blue ">
+            Register here{" "}
+          </Link>
         </p>
         {/* Captain Button */}
         <Link

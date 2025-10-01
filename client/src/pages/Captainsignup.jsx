@@ -1,7 +1,7 @@
 import React from "react";
 
 const Captainsignup = () => {
-  return <div></div>;
+  return <div>ss</div>;
 };
 
 export default Captainsignup;
