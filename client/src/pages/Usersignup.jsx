@@ -1,12 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Usersignup = () => {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [firstName, setFirstName] = useState();
+  const [lastname, setLastName] = useState();
+  const [data, setData] = useState();
   const navigate = useNavigate(); // ✅ hook component ke andar hona chahiye
+
+  const submitHandeler = (e) => {
+    e.preventDefault();
+    setData({
+      username: {
+        firstName: firstName,
+        lastname: lastname,
+      },
+
+      email: email,
+      password: password,
+    });
+    console.log(data);
+
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-      <form className="bg-gray-100 rounded-xl p-10 w-96 shadow-lg space-y-6">
+      <form
+        onSubmit={(e) => {
+          submitHandeler(e);
+        }}
+        className="bg-gray-100 rounded-xl p-10 w-96 shadow-lg space-y-6"
+      >
         {/* Logo */}
         <h1 className="text-3xl font-bold text-black text-center mb-6 hover:scale-105 transition-transform cursor-pointer">
           QuickCab
@@ -23,12 +52,20 @@ const Usersignup = () => {
           <div className="flex gap-2">
             <input
               type="text"
+              value={firstName}
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
               required
               placeholder="First Name"
               className="px-4 w-1/2 py-3 rounded-lg bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
             />
             <input
               type="text"
+              value={lastname}
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
               required
               placeholder="Last Name"
               className="px-4 w-1/2 py-3 rounded-lg bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
@@ -41,6 +78,10 @@ const Usersignup = () => {
           <label className="mb-1 text-gray-900 font-medium">Email</label>
           <input
             type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             required
             placeholder="john@gmail.com"
             className="px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
@@ -52,6 +93,10 @@ const Usersignup = () => {
           <label className="mb-1 text-gray-900 font-medium">Password</label>
           <input
             type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             required
             placeholder="••••••••"
             className="px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
