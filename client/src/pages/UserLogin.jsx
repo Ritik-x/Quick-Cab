@@ -1,17 +1,35 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserDataContext } from "../context/Usercontext";
+import axios from "axios";
 const UserLogin = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [data, setData] = useState();
-  const submitHandler = (e) => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { user, setUser } = useContext(UserDataContext);
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setData({
-      email: email,
-      password: password,
-    });
-    console.log(data);
+    const payload = { email, password };
+    try {
+      const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5001";
+      const res = await axios.post(`${baseUrl}/user/login`, payload);
+      if (res.status === 200) {
+        setUser({
+          email: email,
+          fullName: {
+            firstName: "",
+            lastName: "",
+          },
+        });
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error(
+        "Login failed:",
+        error?.response?.status,
+        error?.response?.data || error
+      );
+    }
   };
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">

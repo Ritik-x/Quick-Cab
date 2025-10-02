@@ -7,7 +7,9 @@ function connectDb() {
       useUnifiedTopology: true,
     })
     .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.error("MongoDB connection error:", err?.message || err);
+    });
 }
 
 export default connectDb;

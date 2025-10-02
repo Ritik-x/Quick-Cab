@@ -1,26 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserDataContext } from "../context/Usercontext"; // ✅ context object import karo
 
 const Usersignup = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [firstName, setFirstName] = useState();
-  const [lastname, setLastName] = useState();
-  const [data, setData] = useState();
-  const navigate = useNavigate(); // ✅ hook component ke andar hona chahiye
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
 
-  const submitHandeler = (e) => {
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserDataContext); // ✅ ab sahi
+
+  const submitHandeler = async (e) => {
     e.preventDefault();
-    setData({
-      username: {
-        firstName: firstName,
-        lastname: lastname,
-      },
 
+    const newUser = {
+      firstName: firstName,
+      lastName: lastname,
       email: email,
       password: password,
-    });
-    console.log(data);
+    };
+
+    try {
+      const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5000";
+      console.log("Signup baseUrl:", baseUrl);
+      const response = await axios.post(`${baseUrl}/user/register`, newUser);
+
+      if (response.status === 201) {
+        setUser({
+          email: email,
+          fullName: { firstName: firstName, lastName: lastname },
+        });
+        navigate("/userlogin");
+      }
+    } catch (error) {
+      console.error(
+        "Signup failed:",
+        error?.response?.status,
+        error?.response?.data || error
+      );
+    }
 
     setFirstName("");
     setLastName("");
@@ -31,13 +51,11 @@ const Usersignup = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
       <form
-        onSubmit={(e) => {
-          submitHandeler(e);
-        }}
+        onSubmit={submitHandeler}
         className="bg-gray-100 rounded-xl p-10 w-96 shadow-lg space-y-6"
       >
         {/* Logo */}
-        <h1 className="text-3xl font-bold text-black text-center mb-6 hover:scale-105 transition-transform cursor-pointer">
+        <h1 className="text-3xl font-bold text-black text-center mb-6">
           QuickCab
         </h1>
 
@@ -53,22 +71,18 @@ const Usersignup = () => {
             <input
               type="text"
               value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
+              onChange={(e) => setFirstName(e.target.value)}
               required
               placeholder="First Name"
-              className="px-4 w-1/2 py-3 rounded-lg bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+              className="px-4 w-1/2 py-3 rounded-lg bg-white border border-gray-300"
             />
             <input
               type="text"
               value={lastname}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
+              onChange={(e) => setLastName(e.target.value)}
               required
               placeholder="Last Name"
-              className="px-4 w-1/2 py-3 rounded-lg bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+              className="px-4 w-1/2 py-3 rounded-lg bg-white border border-gray-300"
             />
           </div>
         </div>
@@ -79,12 +93,10 @@ const Usersignup = () => {
           <input
             type="email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
+            onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="john@gmail.com"
-            className="px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+            className="px-4 py-3 rounded-lg bg-white border border-gray-300"
           />
         </div>
 
@@ -94,20 +106,17 @@ const Usersignup = () => {
           <input
             type="password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
+            onChange={(e) => setPassword(e.target.value)}
             required
             placeholder="••••••••"
-            className="px-4 py-3 rounded-lg bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+            className="px-4 py-3 rounded-lg bg-white border border-gray-300"
           />
         </div>
 
         {/* Sign Up Button */}
         <button
-          type="button" // ⚡ change from "submit" to "button" to avoid page reload
-          onClick={() => navigate("/userlogin")}
-          className="w-full hover:bg-gray-900 text-gray-100 bg-black font-semibold py-3 rounded-lg shadow-md transition transform hover:scale-[1.02] active:scale-95"
+          type="submit"
+          className="w-full hover:bg-gray-900 text-gray-100 bg-black font-semibold py-3 rounded-lg"
         >
           Sign Up
         </button>
