@@ -7,6 +7,7 @@ import Usersignup from "./pages/Usersignup";
 import { Routes, Route } from "react-router-dom";
 import Start from "./pages/Start";
 import { UserDataContext } from "./context/Usercontext";
+import UserProtected from "./pages/UserProtected";
 
 const App = () => {
   const ans = useContext(UserDataContext);
@@ -20,7 +21,14 @@ const App = () => {
         <Route path="/captainlogin" element={<CaptainLogin />} />
         <Route path="/captainsignup" element={<Captainsignup />} />
         <Route path="/usersignup" element={<Usersignup />} />
-        <Route path="/home" element={<Start />} />
+        <Route
+          path="/home"
+          element={
+            <UserProtected>
+              <Start />
+            </UserProtected>
+          }
+        />
       </Routes>
     </div>
   );

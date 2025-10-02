@@ -28,10 +28,12 @@ const Usersignup = () => {
       const response = await axios.post(`${baseUrl}/user/register`, newUser);
 
       if (response.status === 201) {
+        const data = response.data;
         setUser({
           email: email,
           fullName: { firstName: firstName, lastName: lastname },
         });
+        localStorage.setItem("token", data.token);
         navigate("/userlogin");
       }
     } catch (error) {

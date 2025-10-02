@@ -14,6 +14,8 @@ const UserLogin = () => {
       const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5001";
       const res = await axios.post(`${baseUrl}/user/login`, payload);
       if (res.status === 200) {
+        const data = res.data;
+
         setUser({
           email: email,
           fullName: {
@@ -21,6 +23,7 @@ const UserLogin = () => {
             lastName: "",
           },
         });
+        localStorage.setItem("token", data.token);
         navigate("/home");
       }
     } catch (error) {
